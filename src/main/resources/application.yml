@@ -1,0 +1,16 @@
+
+spring:
+  ai:
+    google:
+      genai:
+        api-key: AIzaSyAeu3Yq3mipg1YKuNPcYnDUp8VTqfZCWI0
+
+        chat:
+          options:
+            model: gemini-2.5-flash
+
+        embedding:
+          enabled: false
+
+server:
+  port: 8080
