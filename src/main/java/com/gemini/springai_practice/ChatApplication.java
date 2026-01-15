@@ -48,12 +48,24 @@ public class ChatApplication implements CommandLineRunner {
                 break;
             }
 
+            if (userQuery.equalsIgnoreCase("help")) {
+                System.out.println("""
+                        Available commands:
+                          exit  - Quit the application
+                          help  - Show this help message
+                          clear - Clear screen 
+                        """);
+
+                continue;
+            }
+
             if (userQuery.isEmpty()) {
                 continue;
             }
 
             ChatMessage response = chatService.sendMessage(userQuery);
             System.out.println("AI: " + response.getMessage());
+            System.out.println("ResponseTime: " + response.getResponseTime() + "sec");
             System.out.println();
         }
 

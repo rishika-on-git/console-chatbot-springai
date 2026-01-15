@@ -6,12 +6,14 @@ public class ChatMessage {
     private final String message;
     private final LocalDateTime timestamp;
     private final String sender;
+    private final double responseTime;
 
 
-    public ChatMessage(String message, LocalDateTime timestamp, String sender) {
+    public ChatMessage(String message, LocalDateTime timestamp, String sender, double responseTime) {
         this.message = message;
         this.timestamp = timestamp;
         this.sender = sender;
+        this.responseTime = responseTime;
     }
 
 
@@ -26,6 +28,10 @@ public class ChatMessage {
 
     public String getMessage() {
         return message;
+    }
+
+    public double getResponseTime() {
+        return responseTime;
     }
 
     public LocalDateTime getTimestamp() {
