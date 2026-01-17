@@ -51,6 +51,9 @@ public class ChatService {
     }
 
     public void printHistory() {
+        if (history.isEmpty()) {
+            System.out.println("History is empty");
+        }
         for (ChatMessage msg : history) {
             if (msg instanceof AiMessage ai) {
                 System.out.println("AI (" + ai.getResponseTime() + " sec): " + ai.getMessage());
@@ -58,5 +61,10 @@ public class ChatService {
                 System.out.println("USER: " + msg.getMessage());
             }
         }
+    }
+
+    public void clearHistory() {
+        history.clear();
+        System.out.println("Conversation history cleared!\n");
     }
 }

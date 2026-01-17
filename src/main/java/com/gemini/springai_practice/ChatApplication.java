@@ -52,6 +52,11 @@ public class ChatApplication implements CommandLineRunner {
                 continue;
             }
 
+            if (input.equalsIgnoreCase("clear")) {
+                chatService.clearHistory();
+                continue;
+            }
+
             ChatMessage response = chatService.sendMessage(input);
 
             System.out.println("AI: " + response.getMessage());
