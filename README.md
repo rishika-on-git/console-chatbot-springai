@@ -142,6 +142,9 @@ You:
 
 4. Start typing your questions and press Enter
 
+<img width="681" height="235" alt="image" src="https://github.com/user-attachments/assets/ede62e25-830c-4d95-bf94-eee3ee7c8472" />
+<img width="561" height="146" alt="image" src="https://github.com/user-attachments/assets/44f350b7-696b-49c9-86aa-7845dd626076" />
+
 ## Usage Examples
 
 **Ask a question:**
