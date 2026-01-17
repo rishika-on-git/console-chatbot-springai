@@ -1,0 +1,9 @@
+long is primitive and holds the actual value. it cannot be null
+Long is an object that is a wrapper of long primitive. It has extra features (methods)
+Java objects , Lists , Strings all allow Long only.
+
+Use long when you know value will always exist and you do calculations.
+
+Use Long when: value can be missing (null)
+-you are using List<Long>, Map<Long, ...> etc
+-frameworks like Spring/JPA sometimes prefer wrapper types for optional fields
