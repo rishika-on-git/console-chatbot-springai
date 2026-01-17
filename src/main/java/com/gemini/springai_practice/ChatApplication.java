@@ -1,5 +1,6 @@
 package com.gemini.springai_practice;
 
+import com.gemini.springai_practice.dto.AiMessage;
 import com.gemini.springai_practice.dto.ChatMessage;
 import com.gemini.springai_practice.service.ChatService;
 import org.springframework.ai.model.google.genai.autoconfigure.embedding.GoogleGenAiEmbeddingConnectionAutoConfiguration;
@@ -14,7 +15,6 @@ import java.util.Scanner;
         GoogleGenAiEmbeddingConnectionAutoConfiguration.class,
         GoogleGenAiTextEmbeddingAutoConfiguration.class
 })
-
 public class ChatApplication implements CommandLineRunner {
 
     private final ChatService chatService;
@@ -36,40 +36,33 @@ public class ChatApplication implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hey, Let's Chat!");
-        System.out.println("**********");
-        System.out.println("Type your question or 'exit' to quit");
+        System.out.println("Type your question, 'history', or 'exit'");
 
         while (true) {
             System.out.print("You: ");
-            String userQuery = scanner.nextLine().trim();
+            String input = scanner.nextLine().trim();
 
-            if (userQuery.equalsIgnoreCase("exit")) {
+            if (input.equalsIgnoreCase("exit")) {
                 System.out.println("Goodbye");
                 break;
             }
 
-            if (userQuery.equalsIgnoreCase("help")) {
-                System.out.println("""
-                        Available commands:
-                          exit  - Quit the application
-                          help  - Show this help message
-                          clear - Clear screen 
-                        """);
-
+            if (input.equalsIgnoreCase("history")) {
+                chatService.printHistory();
                 continue;
             }
 
-            if (userQuery.isEmpty()) {
-                continue;
-            }
+            ChatMessage response = chatService.sendMessage(input);
 
-            ChatMessage response = chatService.sendMessage(userQuery);
             System.out.println("AI: " + response.getMessage());
-            System.out.println("ResponseTime: " + response.getResponseTime() + "sec");
+
+            if (response instanceof AiMessage ai) {
+                System.out.println("ResponseTime: " + ai.getResponseTime() + " sec");
+            }
+
             System.out.println();
         }
 
         scanner.close();
     }
 }
-

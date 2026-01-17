@@ -1,58 +1,62 @@
 package com.gemini.springai_practice.service;
 
-import com.gemini.springai_practice.dto.ChatMessage;
+import com.gemini.springai_practice.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ChatService {
 
     private final GeminiService geminiService;
+    private final List<ChatMessage> history = new ArrayList<>();
 
     public ChatService(GeminiService geminiService) {
         this.geminiService = geminiService;
     }
 
-    public ChatMessage sendMessage(String message) {
+    public ChatMessage sendMessage(String input) {
 
-        if (message == null) {
-            throw new IllegalArgumentException("Message cannot be null");
-        }
-
-        String trimmedMessage = message.trim();
-        if (trimmedMessage.isEmpty()) {
+        if (input == null || input.trim().isEmpty()) {
             throw new IllegalArgumentException("Message cannot be empty");
         }
 
-        int wordLimit = 100;
-        int wordCountInput = trimmedMessage.split("\\s+").length;
-        if (wordCountInput > wordLimit) {
-            throw new IllegalArgumentException("Message too long (max " + wordLimit + " words)");
-        }
+        String trimmed = input.trim();
+
+        UserMessage user = new UserMessage(trimmed, LocalDateTime.now());
+        history.add(user);
 
         try {
-            long startTime = System.currentTimeMillis();
+            long start = System.currentTimeMillis();
+            String response = geminiService.askAI(trimmed);
+            long end = System.currentTimeMillis();
 
-            String response = geminiService.askAI(trimmedMessage);
+            double responseTimeSec = (end - start) / 1000.0;
 
-            long endTime = System.currentTimeMillis();
-            long durationMs = endTime - startTime;
-            double durationSeconds = durationMs / 1000.0;
+            String safeResponse = response == null ? "" : response.trim();
+            long words = safeResponse.isEmpty() ? 0 : safeResponse.split("\\s+").length;
 
-            String safeResponse = (response == null) ? "" : response.trim();
+            String finalResponse = safeResponse + "\n" + words + " words";
 
-            long wordCountResponse = safeResponse.isEmpty()
-                    ? 0
-                    : safeResponse.split("\\s+").length;
+            AiMessage ai = new AiMessage(finalResponse, responseTimeSec, LocalDateTime.now());
+            history.add(ai);
 
-            String messageReceived = safeResponse + "\n" + wordCountResponse + " words";
-
-            return new ChatMessage(messageReceived, LocalDateTime.now(), "AI", durationSeconds);
+            return ai;
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to get AI response", e);
+        }
+    }
+
+    public void printHistory() {
+        for (ChatMessage msg : history) {
+            if (msg instanceof AiMessage ai) {
+                System.out.println("AI (" + ai.getResponseTime() + " sec): " + ai.getMessage());
+            } else {
+                System.out.println("USER: " + msg.getMessage());
+            }
         }
     }
 }

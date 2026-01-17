@@ -7,3 +7,32 @@ Use long when you know value will always exist and you do calculations.
 Use Long when: value can be missing (null)
 -you are using List<Long>, Map<Long, ...> etc
 -frameworks like Spring/JPA sometimes prefer wrapper types for optional fields
+
+
+-project example (mapped clearly)
+
+ChatMessage msg = new AiMessage(...);
+
+* `ChatMessage` → parent type (reference)
+* `AiMessage` → child type (actual object)
+
+This is allowed in sendMessage because:
+> **AiMessage IS-A ChatMessage**
+
+Why Java allows this
+Because it lets you write **flexible code**.
+Your method:
+
+ChatMessage sendMessage(...)
+
+Can later return:
+
+* `AiMessage`
+* `UserMessage`
+* `SystemMessage`
+
+Without changing the method signature.
+
+> **Runtime polymorphism lets a parent reference hold a child object,
+> and the actual object decides behavior at runtime.
+> `instanceof` is how we safely check what that object really is.**
