@@ -1,5 +1,3 @@
-# Spring AI Gemini Practice
-
 A beginner-friendly Spring Boot project for learning Spring AI concepts by building a simple chatbot powered by Google Gemini AI.
 
 ## What This Project Does
